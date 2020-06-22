@@ -32,28 +32,46 @@ public class DemoApplicationTests {
         userResourceV1.insertNewUser(user);
 
         //Then - I will do some assertions
-        User joe = userResourceV1.fetchUser(userUid);
+        User joe = userResourceV1.fetchUser(userUid); // use actual data type user gets back not response
         assertThat(joe).isEqualToComparingFieldByField(user);
     }
 
-//    @Test
-//    public void shouldDeleteUser() throws Exception {
-//        //Given - given this data
-//        UUID userUid = UUID.randomUUID();
-//        User user = new User(userUid, "Francisco", "Contreras", User.Gender.MALE, 22, "fcontreras@gofundme.com");
-//
-//        //When - I insert user
-//        userResourceV1.insertNewUser(user);
-//
-//        //Then - I will do some assertions
-//        User joe = userResourceV1.fetchUser(userUid);
-//        assertThat(joe).isEqualToComparingFieldByField(user);
-//
-//        //When
-//        userResourceV1.deleteUser(userUid);
-//
-//        //Then
-//        assertThatThrownBy(() ->userResourceV1.fetchUser(userUid))
-//                .isInstanceOf(NotFoundException.class);
-//    }
+    @Test
+    public void shouldDeleteUser() throws Exception {
+        //Given - given this data
+        UUID userUid = UUID.randomUUID();
+        User user = new User(userUid, "Francisco", "Contreras", User.Gender.MALE, 22, "fcontreras@gofundme.com");
+
+        //When - I insert user
+        userResourceV1.insertNewUser(user);
+
+        //Then - I will do some assertions
+        User joe = userResourceV1.fetchUser(userUid);
+        assertThat(joe).isEqualToComparingFieldByField(user);
+
+        //When
+        userResourceV1.deleteUser(userUid);
+
+        //Then
+        assertThatThrownBy(()-> userResourceV1.fetchUser(userUid))
+                .isInstanceOf(NotFoundException.class);//need to catch exception becasue enty does not exist.
+    }
+
+    @Test
+    public void shouldUpdateUser() throws Exception {
+        //Given - given this data
+        UUID userUid = UUID.randomUUID();
+        User user = new User(userUid, "Francisco", "Contreras", User.Gender.MALE, 22, "fcontreras@gofundme.com");
+
+        //When - I insert user
+        userResourceV1.insertNewUser(user);
+
+        User updatedUser = new User(userUid, "Francisco", "Contreras", User.Gender.MALE, 55, "fcontreras@gofundme.com");
+
+        userResourceV1.updateUser(updatedUser);
+
+        //then
+        user = userResourceV1.fetchUser(userUid);
+        assertThat(user).isEqualToComparingFieldByField(user);
+    }
 }

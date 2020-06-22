@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Optional;
@@ -60,11 +61,10 @@ public class UserResourceResteasy {
     }
 
     @DELETE
-    @Produces(APPLICATION_JSON)
-    @Path("{userUid")
-    public Response deleteUser(@PathParam("userUid") UUID userUid) {
-        int result = userService.removeUser(userUid);
-        return getIntegerResponseEntity(result);
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("{userUid}")
+    public void deleteUser(@PathParam("userUid") UUID userUid) {
+        userService.removeUser(userUid);
     }
 
     private Response getIntegerResponseEntity(int result) {
